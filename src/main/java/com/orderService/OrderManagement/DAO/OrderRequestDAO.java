@@ -11,5 +11,5 @@ import java.util.List;
 @Setter
 public class OrderRequestDAO {
 
-    private List<Product> productList;
+    private List<List<String>> productList;
 }

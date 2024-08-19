@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-
+@Table(name = "`order`")
 public class Order {
 
     @Id
@@ -19,10 +19,8 @@ public class Order {
     private int orderId;
     @OneToMany
     private List<Product> productsList;
+    @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
+    private int orderAmount;
 
-    public Order(List<Product> orderProducts, OrderStatus orderStatus) {
-        this.productsList = orderProducts;
-        this.orderStatus = orderStatus;
-    }
 }

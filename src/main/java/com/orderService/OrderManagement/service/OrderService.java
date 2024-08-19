@@ -29,15 +29,20 @@ public class OrderService {
     public OrderResponseDAO OrderProduct(OrderRequestDAO orderRequestDAO) throws ProductNotFoundException {
         int orderAmount = 0;
         List<Product> orderProducts = new ArrayList<>();
-        for(Product product: orderRequestDAO.getProductList()){
-            Optional<Product> optionalProduct = productRepository.findById(product.getProductId());
-            if(optionalProduct.isEmpty()) throw new ProductNotFoundException("Product Not Found");
-            orderAmount += product.getProductAmount();
-            orderProducts.add(product);
+        for(List<String> product: orderRequestDAO.getProductList()) {
+            Optional<Product> optionalProduct = Optional.ofNullable(productRepository.findProductByProductName(product.get(0)));
+            if (optionalProduct.isEmpty()) throw new ProductNotFoundException("Product Not Found");
+            int productQuantity = Integer.parseInt(product.get(1));
+            orderAmount = orderAmount + (optionalProduct.get().getProductAmount() * productQuantity);
+            if(orderProducts.contains(optionalProduct.get())) orderProducts.add(optionalProduct.get());
         }
-        Order newOrder = new Order(orderProducts, OrderStatus.INPROGRESS);
+        Order newOrder = new Order();
+        newOrder.setProductsList(orderProducts);
+        newOrder.setOrderStatus(OrderStatus.INPROGRESS);
+        newOrder.setOrderAmount(orderAmount);
         orderRepository.save(newOrder);
         OrderResponseDAO orderResponseDAO = new OrderResponseDAO();
+        orderResponseDAO.setOrderId(newOrder.getOrderId());
         orderResponseDAO.setOrderAmount(orderAmount);
         orderResponseDAO.setOrderStatus(OrderStatus.INPROGRESS);
         //payment service can be called once we confirm order and once payment is completed we can make orderstatus to completed

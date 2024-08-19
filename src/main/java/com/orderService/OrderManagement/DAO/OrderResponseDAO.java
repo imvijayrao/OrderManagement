@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class OrderResponseDAO {
 
-
+    private long orderId;
     private int orderAmount;
     private OrderStatus orderStatus;
 }
