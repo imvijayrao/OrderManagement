@@ -1,6 +1,7 @@
 package com.orderService.OrderManagement.service;
 
 
+import com.orderService.OrderManagement.DAO.OrderExceptionDAO;
 import com.orderService.OrderManagement.DAO.OrderRequestDAO;
 import com.orderService.OrderManagement.DAO.OrderResponseDAO;
 import com.orderService.OrderManagement.exception.ProductNotFoundException;
@@ -22,9 +23,11 @@ public class OrderService {
 
     @Autowired
     ProductRepository productRepository;
-
     @Autowired
     OrderRepository orderRepository;
+
+    private String orderExceptionMessage = "Order Not Found";
+    private int errorCode = 404;
 
     public OrderResponseDAO OrderProduct(OrderRequestDAO orderRequestDAO) throws ProductNotFoundException {
         int orderAmount = 0;
@@ -48,5 +51,16 @@ public class OrderService {
         //payment service can be called once we confirm order and once payment is completed we can make orderstatus to completed
 
         return orderResponseDAO;
+    }
+
+    public ResponseEntity<>OrderResponseDAO getOrderById(Long orderId) throws OrderExceptionDAO {
+        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        if(optionalOrder.isEmpty()) throw new OrderExceptionDAO(orderExceptionMessage, errorCode);
+        Order order = optionalOrder.get();
+        OrderResponseDAO orderResponseDAO = new OrderResponseDAO();
+        orderResponseDAO.setOrderId(orderId);
+        orderResponseDAO.setOrderAmount(order.getOrderAmount());
+        orderResponseDAO.setOrderStatus(order.getOrderStatus());
+        return new ResponseEntity<>(orderResponseDAO);
     }
 }
