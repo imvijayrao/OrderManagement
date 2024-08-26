@@ -22,8 +22,7 @@ public class OrderController {
     }
 
     @GetMapping("/orderproduct/{id}")
-    public ResponseEntity<GlobalControllerAdvice> checkOrder(@PathVariable("id") Long id) throws OrderExceptionDAO {
-        OrderResponseDAO orderResponseDAO = orderService.getOrderById(id);
-        return new ResponseEntity<>(orderResponseDAO);
+    public ResponseEntity<OrderResponseDAO> checkOrder(@PathVariable("id") Long id) throws OrderExceptionDAO {
+        return orderService.getOrderById(id);
     }
 }

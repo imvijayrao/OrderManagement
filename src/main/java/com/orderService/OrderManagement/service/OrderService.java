@@ -53,7 +53,7 @@ public class OrderService {
         return orderResponseDAO;
     }
 
-    public ResponseEntity<>OrderResponseDAO getOrderById(Long orderId) throws OrderExceptionDAO {
+    public ResponseEntity<OrderResponseDAO> getOrderById(Long orderId) throws OrderExceptionDAO {
         Optional<Order> optionalOrder = orderRepository.findById(orderId);
         if(optionalOrder.isEmpty()) throw new OrderExceptionDAO(orderExceptionMessage, errorCode);
         Order order = optionalOrder.get();
