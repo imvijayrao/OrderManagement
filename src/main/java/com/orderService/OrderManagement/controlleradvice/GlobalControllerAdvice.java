@@ -2,6 +2,7 @@ package com.orderService.OrderManagement.controlleradvice;
 
 import com.orderService.OrderManagement.DAO.ErrorResponseDAO;
 import com.orderService.OrderManagement.exception.OrderExceptionDAO;
+import com.orderService.OrderManagement.exception.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,12 +12,17 @@ import org.springframework.web.context.request.WebRequest;
 @RestControllerAdvice
 public class GlobalControllerAdvice {
 
-    private String orderExceptionMessage = "Order Not Found";
-    private int errorCode = 404;
+    private int notFoundErrorCode = 404;
 
     @ExceptionHandler(OrderExceptionDAO.class)
     public ResponseEntity<Object> handleOrderException(OrderExceptionDAO ex, WebRequest request){
-        ErrorResponseDAO errorResponseDAO = new ErrorResponseDAO(ex.getMessage(), errorCode, request.getDescription(false));
+        ErrorResponseDAO errorResponseDAO = new ErrorResponseDAO(ex.getMessage(), notFoundErrorCode, request.getDescription(false));
         return new ResponseEntity(errorResponseDAO, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<Object> handleProductException(ProductNotFoundException ex, WebRequest request){
+        ErrorResponseDAO errorResponseDAO = new ErrorResponseDAO(ex.getMessage(), notFoundErrorCode, request.getDescription(true));
+        return new ResponseEntity<>(errorResponseDAO, HttpStatus.NOT_FOUND);
     }
 }
