@@ -1,7 +1,7 @@
 package com.orderService.OrderManagement.service;
 
 
-import com.orderService.OrderManagement.DAO.OrderExceptionDAO;
+import com.orderService.OrderManagement.exception.OrderExceptionDAO;
 import com.orderService.OrderManagement.DAO.OrderRequestDAO;
 import com.orderService.OrderManagement.DAO.OrderResponseDAO;
 import com.orderService.OrderManagement.exception.ProductNotFoundException;
@@ -53,7 +53,7 @@ public class OrderService {
         return orderResponseDAO;
     }
 
-    public ResponseEntity<OrderResponseDAO> getOrderById(Long orderId) throws OrderExceptionDAO {
+    public OrderResponseDAO getOrderById(Long orderId) throws OrderExceptionDAO {
         Optional<Order> optionalOrder = orderRepository.findById(orderId);
         if(optionalOrder.isEmpty()) throw new OrderExceptionDAO(orderExceptionMessage, errorCode);
         Order order = optionalOrder.get();
@@ -61,6 +61,6 @@ public class OrderService {
         orderResponseDAO.setOrderId(orderId);
         orderResponseDAO.setOrderAmount(order.getOrderAmount());
         orderResponseDAO.setOrderStatus(order.getOrderStatus());
-        return new ResponseEntity<>(orderResponseDAO);
+        return orderResponseDAO;
     }
 }

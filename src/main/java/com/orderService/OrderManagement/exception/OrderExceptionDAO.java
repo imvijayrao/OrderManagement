@@ -1,4 +1,4 @@
-package com.orderService.OrderManagement.DAO;
+package com.orderService.OrderManagement.exception;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -7,7 +7,8 @@ import org.springframework.http.HttpStatusCode;
 
 @Getter
 @Setter
-public class OrderResponseDAO implements HttpStatusCode {
+
+public class OrderResponseDAO{
 
     private long orderId;
     private int orderAmount;
